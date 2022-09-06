@@ -36,7 +36,9 @@ const Home: NextPage = () => {
   };
 
   const address = useAddress();
-  const nftDrop = useNFTDrop(process.env.NEXT_PUBLIC_NFT_DROP_CONTRACT_ADDRESS as string);
+  const nftDrop = useNFTDrop(
+    process.env.NEXT_PUBLIC_GASLESS_NFT_DROP_CONTRACT_ADDRESS as string
+  );
 
   const {
     mutate: claim,
