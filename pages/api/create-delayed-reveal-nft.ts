@@ -7,19 +7,19 @@ export default async function CreateDelayedRevealNft(
   res: NextApiResponse
 ) {
   const goerliSDK = ThirdwebSDK.fromPrivateKey(
-    process.env.GOERLI_WALLET_PRIVATE_KEY as string,
+    process.env.NEXT_PUBLIC_GOERLI_WALLET_PRIVATE_KEY as string,
     "goerli"
   );
   
   const contract = goerliSDK.getNFTDrop(
-    process.env.NFT_DROP_CONTRACT_ADDRESS as string,
+    process.env.NEXT_PUBLIC_DELAYED_REVEAL_NFT_CONTRACT_ADDRESS as string
   );
   // the real NFTs, these will be encrypted until you reveal them
   const realNFTs = [
     {
       name: "Common NFT #1",
       description: "Common NFT, one of many.",
-      animation_url: fs.readFileSync("./public/1.mp3"),
+      animation_url: fs.readFileSync("./public/1.mp3"), // use animation_url for audio / video url
       image: fs.readFileSync("./public/1.png"),
     },
   ];
