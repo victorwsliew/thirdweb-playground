@@ -8,36 +8,13 @@ import {
   useOwnedNFTs,
   useClaimNFT,
   useEditionDrop,
+  ChainId,
 } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-
+import { useWeb3Wrapper } from "../../web3-wrapper/hooks/use-web3-wrapper-context";
 
 const Home: NextPage = () => {
-  const { push } = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const contract = useNFTCollection(
-    process.env.NEXT_PUBLIC_DISPLAY_NFT_COLLECITION_CONTRACT_ADDRESS as string
-  );
-
-  const { data: nft, isLoading: isLoadingNft } = useNFT(contract, 1);
-
-  const createEncryptNft = async () => {
-    setIsLoading(true);
-    // Create and encrypt the NFTs
-    const init = async () => {
-      await fetch("/api/create-delayed-reveal-nft", {
-        method: "POST",
-      });
-      return;
-    };
-
-    init().then(() => {
-      setIsLoading(false);
-    });
-  };
-
   const address = useAddress();
   const nftDrop = useEditionDrop(
     process.env.NEXT_PUBLIC_GASLESS_NFT_DROP_CONTRACT_ADDRESS as string
@@ -81,31 +58,23 @@ const Home: NextPage = () => {
     }
   }, [isSuccess, tx]);
 
+
+  const [_, setWeb3Config] = useWeb3Wrapper();
+  useEffect(() => {
+    setWeb3Config({
+      chainId: ChainId.Rinkeby,
+      isGasless: true,
+    });
+    
+  }, []);
+
   return (
     <div>
       <ConnectWallet accentColor="white" colorMode="light" />
 
       <hr />
 
-      <button onClick={createEncryptNft} disabled={isLoading}>
-        {isLoading ? "loading...." : "Create Delayed Reveal NFTs"}
-      </button>
-
-      <hr />
-
-      <h1>Test ThirdwebNftMedia Component</h1>
-
-      <div style={{ width: "200px" }}>
-        {!isLoadingNft && nft ? (
-          <ThirdwebNftMedia metadata={nft.metadata} />
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-
-      <hr />
-
-      <h1>Test claim</h1>
+      <h1>Test gasless claim</h1>
 
       <button
         onClick={claimNFT}
@@ -132,9 +101,6 @@ const Home: NextPage = () => {
             );
           })}
       </div>
-
-      <hr />
-      <button onClick={() => push("/free-mint")}>Go to Free Mint</button>
     </div>
   );
 };
