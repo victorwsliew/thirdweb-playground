@@ -11,10 +11,12 @@ import {
   ChainId,
 } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useWeb3Wrapper } from "../../web3-wrapper/hooks/use-web3-wrapper-context";
 
-const Home: NextPage = () => {
+const FreeMint: NextPage = () => {
+  const { push } = useRouter();
   const address = useAddress();
   const nftDrop = useEditionDrop(
     process.env.NEXT_PUBLIC_GASLESS_NFT_DROP_CONTRACT_ADDRESS as string
@@ -101,8 +103,10 @@ const Home: NextPage = () => {
             );
           })}
       </div>
+      <hr />
+      <button onClick={() => push("/")}>Back to Home</button>
     </div>
   );
 };
 
-export default Home;
+export default FreeMint;
