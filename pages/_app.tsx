@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 // This is the chainId your dApp will work on.
-const activeChainId = ChainId.Goerli;
+const activeChainId = ChainId.Rinkeby; // todo: how to dynamic choosing chain??
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

@@ -36,7 +36,7 @@ const Home: NextPage = () => {
   };
 
   const address = useAddress();
-  const nftDrop = useNFTDrop(
+  const nftDrop = useEditionDrop(
     process.env.NEXT_PUBLIC_GASLESS_NFT_DROP_CONTRACT_ADDRESS as string
   );
 
@@ -51,11 +51,9 @@ const Home: NextPage = () => {
     const quantity = 1;
     try {
       if (!nftDrop || !address) return;
-      nftDrop?.interceptor.overrideNextTransaction(() => ({
-        gasLimit: 3000000,
-      }));
       claim({
         to: address,
+        tokenId: 0,
         quantity,
       });
     } catch (err) {
@@ -114,21 +112,24 @@ const Home: NextPage = () => {
         {isClaiming ? "loading...." : "claim NFT"}
       </button>
 
+        <br />
+        <h4>my nfts</h4>
       <div style={{ margin: "2px", display: "flex", flexDirection: "row" }}>
-        {(ownedNFTs ?? []).length > 0 &&
+
+        {isLoadingNfts && <p>Loading...</p>}
+        {!isLoadingNfts &&
+          (ownedNFTs ?? []).length > 0 &&
           ownedNFTs?.map((nft, index) => {
             return (
-              <div key={index} style={{ width: "50px" }}>
-                {!isLoadingNfts && nft ? (
-                  <ThirdwebNftMedia metadata={nft.metadata} />
-                ) : (
-                  <p>Loading...</p>
-                )}
+              <div key={index}>
+                <ThirdwebNftMedia
+                  metadata={nft.metadata}
+                  style={{ width: "200px" }}
+                />
               </div>
             );
           })}
       </div>
-      
     </div>
   );
 };
